@@ -66,6 +66,22 @@ impl<T: PartialOrd + Clone + Display> BTree<T> {
             }
         }
     }
+
+    fn is_leaf(&self) -> bool {
+        self.left.is_none() && self.right.is_none() 
+    }
+
+    fn min(&self) -> T {
+        if let Some(left) = &self.left {
+            left.min()
+        } else { return self.data.clone(); }
+    }
+
+    fn max(&self) -> T {
+        if let Some(right) = &self.right {
+            right.max()
+        } else { return self.data.clone(); }
+    }
 }
 
 #[derive(Debug, PartialEq, PartialOrd, Clone)]
@@ -99,4 +115,8 @@ fn main() {
     btree2.insert(MyPair { data: 6, idx: 2 });
     btree2.insert(MyPair { data: 7, idx: 3 });
     btree2.print();
+    println!("{}", btree2.min());
+    println!("{}", btree2.max());
+    println!("{}", btree2.is_leaf());
+    println!("{}", btree2.left.unwrap().is_leaf());
 }
