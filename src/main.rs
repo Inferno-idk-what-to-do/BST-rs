@@ -82,6 +82,18 @@ impl<T: PartialOrd + Clone + Display> BTree<T> {
             right.max()
         } else { return self.data.clone(); }
     }
+
+    fn contains(&self, target: T) -> bool {
+        if self.data == target { return true; }
+
+        if target < self.data {
+            if self.left.is_none() { return false; }
+            return self.left.as_ref().unwrap().contains(target);
+        } else {
+            if self.right.is_none() { return false; }
+            return self.right.as_ref().unwrap().contains(target);
+        }
+    }
 }
 
 #[derive(Debug, PartialEq, PartialOrd, Clone)]
@@ -118,5 +130,7 @@ fn main() {
     println!("{}", btree2.min());
     println!("{}", btree2.max());
     println!("{}", btree2.is_leaf());
-    println!("{}", btree2.left.unwrap().is_leaf());
+    println!("{}", btree2.left.as_ref().unwrap().is_leaf());
+    println!("{}", btree2.contains(MyPair { data: 6, idx: 2 }));
+    println!("{}", btree2.contains(MyPair { data: 4, idx: 2 }));
 }
